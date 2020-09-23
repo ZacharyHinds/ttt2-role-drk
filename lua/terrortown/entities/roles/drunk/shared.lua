@@ -1,11 +1,11 @@
-AddCSLuaFile()
 
 if SERVER then
-  resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_spr.vmt")
+  AddCSLuaFile()
+  -- resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_drk.vmt")
 end
 
 function ROLE:PreInitialize()
-  self.color = Color(26, 188, 156, 255)
+  self.color = Color(171, 62, 142, 255)
 
   self.abbr = "drk" -- abbreviation
   self.surviveBonus = 0 -- bonus multiplier for every survive while another player was killed
@@ -26,7 +26,7 @@ end
 
 function SetDrunkTeam(ply)
   if ply:GetSubRole() ~= ROLE_DRUNK then return end
-  ply:SetNWBool("DrunkAwake", false)
+  ply:SetNWBool("DrunkSober", false)
   local teams = roles.GetAvailableTeams()
   local new_team
   repeat
@@ -57,5 +57,30 @@ if SERVER then
         SetDrunkTeam(ply)
       end
     end)
+  end)
+else
+  net.Receive("ttt2_drk_remembers", function()
+    local team = net.ReadString()
+    local teamcolor = net.ReadColor()
+    EPOP:AddMessage({
+        text = LANG.GetParamTranslation("ttt2_drk_remembers", {team = team}),
+        color = teamcolor
+      },
+      nil,
+      12,
+      nil,
+      true
+    )
+  end)
+
+  net.Receive("ttt2_drk_sober", function()
+    EPOP:AddMessage({
+        text = LANG.TryTranslation("ttt2_drk_sober")
+      },
+      nil,
+      6,
+      nil,
+      true
+    )
   end)
 end
