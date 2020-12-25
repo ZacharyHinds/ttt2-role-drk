@@ -1,7 +1,7 @@
 
 if SERVER then
   AddCSLuaFile()
-  -- resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_drk.vmt")
+  resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_drk.vmt")
 end
 
 function ROLE:PreInitialize()
@@ -24,63 +24,101 @@ function ROLE:PreInitialize()
   }
 end
 
-function SetDrunkTeam(ply)
-  if ply:GetSubRole() ~= ROLE_DRUNK then return end
-  ply:SetNWBool("DrunkSober", false)
-  local teams = roles.GetAvailableTeams()
-  local new_team
-  repeat
-    if #teams <= 0 then
-      ply:UpdateTeam(TEAM_INNOCENT)
-      return
-    end
-    local rnd = math.random(#teams)
-    new_team = teams[rnd]
-    table.remove(teams, rnd)
-  until #roles.GetTeamMembers(new_team) > 0
-  ply:UpdateTeam(new_team)
-end
+util.AddNetworkString("ttt2_drk_remembers")
 
 if SERVER then
-  hook.Add("TTTBeginRound", "TTTDrunkTeam", function()
-    timer.Simple(0.5, function()
-      local plys = util.GetAlivePlayers()
-      for i = 1, #plys do
-        SetDrunkTeam(plys[i])
+  util.AddNetworkString("ttt2_drk_sober")
+  function SetupDrkPly(ply, plys)
+    if not IsValid(ply) or not ply:IsPlayer() or not ply:Alive() or ply:IsSpec() then return end
+    if ply:GetSubRole() ~= ROLE_DRUNK then return end
+    plys = plys or util.GetAlivePlayers()
+    local pl
+    repeat
+      if #plys <= 0 then
+        plys = util.GetAlivePlayers()
+        if #plys <= 0 then return end
       end
-    end)
+      local rnd = math.random(#plys)
+      pl = plys[rnd]
+      table.remove(plys, rnd)
+    until IsValid(ply) and pl ~= ply and pl:GetSubRole() ~= ROLE_DRUNK
+    pl.drkPlyTag = ply:SteamID()
+  end
+
+  function ResetDrk(ply)
+    if not IsValid(ply) or not ply:IsPlayer() then return end
+    ply.drkPlyTag = nil
+  end
+
+  function ResetAllDrk()
+    local plys = player.GetAll()
+    for i = 1, #plys do
+      ResetDrk(plys[i])
+    end
+  end
+
+  hook.Add("TTTBeginRound", "TTT2DrunkSetup", function()
+    ResetAllDrk()
+    -- timer.Simple(0.5, function()
+    --   local plys = util.GetAlivePlayers()
+    --   for i = 1, #plys do
+    --     SetupDrkPly(plys[i], plys)
+    --   end
+    -- end)
   end)
 
-  hook.Add("TTT2UpdateSubrole", "DrunkRoleChange", function(ply, old, new)
+  hook.Add("TTTEndRound", "TTT2ResetDrunk", ResetAllDrk)
+  hook.Add("TTTPrepRound", "TTT2ResetDrunk", ResetAllDrk)
+
+  hook.Add("TTT2UpdateSubrole", "TTT2DrunkRoleChange", function(ply, old, new)
     timer.Simple(0.5, function()
       if new == ROLE_DRUNK then
-        SetDrunkTeam(ply)
+        SetupDrkPly(ply)
       end
     end)
   end)
-else
-  net.Receive("ttt2_drk_remembers", function()
-    local team = net.ReadString()
-    local teamcolor = net.ReadColor()
-    EPOP:AddMessage({
-        text = LANG.GetParamTranslation("ttt2_drk_remembers", {team = team}),
-        color = teamcolor
-      },
-      nil,
-      12,
-      nil,
-      true
-    )
+
+  function SoberUpPly(ply, new_role)
+    if not IsValid(ply) or not ply:IsPlayer() or ply:IsSpec() or not ply:Alive() then return end
+    if ply:GetSubRole() ~= ROLE_DRUNK then return end
+    new_role = new_role or ROLE_INNOCENT
+    ply:SetRole(new_role)
+    SendFullStateUpdate()
+    print("[TTT2 Drunk] Writing Net Message")
+    net.Start("ttt2_drk_sober")
+      -- net.WriteString(ply:GetRoleString())
+      -- net.WriteColor(ply:GetRoleLtColor())
+    net.Broadcast()
+    print("[TTT2 Drunk] Broadcasting Net Message")
+  end
+
+  hook.Add("TTT2PostPlayerDeath", "DrunkTargetDied", function(ply, _, attacker)
+    if not IsValid(ply) or not ply:IsPlayer() then return end
+    if not ply.drkPlyTag then return end
+    -- print("[TTT2 Drunk] Drunk target identified")
+
+    local drk = player.GetBySteamID(ply.drkPlyTag)
+    -- print("[TTT2 Drunk] Connnected Drunk: " .. drk:Name())
+    SoberUpPly(drk, ply:GetSubRole())
+    ply.drkPlyTag = nil
   end)
 
-  net.Receive("ttt2_drk_sober", function()
-    EPOP:AddMessage({
-        text = LANG.TryTranslation("ttt2_drk_sober")
-      },
-      nil,
-      6,
-      nil,
-      true
-    )
+  hook.Add("PlayerDisconnected", "DrunkTargetDisconnected", function(ply)
+    if not IsValid(ply) or not ply:IsPlayer() then return end
+    if not ply.drkPlyTag then return end
+    local drk = player.GetBySteamID(ply.drkPlyTag)
+    SoberUpPly(drk, ply:GetSubRole())
+    ply.drkPlyTag = nil
+  end)
+
+  concommand.Add("ttt2_drk_identify", function()
+    local plys = player.GetAll()
+    for i = 1, #plys do
+      local ply = plys[i]
+      if ply.drkPlyTag then
+        local drk = player.GetBySteamID(ply.drkPlyTag)
+        print("[TTT2 Drunk] Drunk: " .. drk:Name() .. " | Targeting: " .. ply:Nick() .. " (" .. ply:GetRoleString() .. ")")
+      end
+    end
   end)
 end
