@@ -24,8 +24,6 @@ function ROLE:PreInitialize()
   }
 end
 
-util.AddNetworkString("ttt2_drk_remembers")
-
 if SERVER then
   util.AddNetworkString("ttt2_drk_sober")
   function SetupDrkPly(ply, plys)
