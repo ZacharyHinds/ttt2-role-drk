@@ -13,3 +13,4 @@ L["ttt2_desc_" .. DRUNK.name] = [[Алкаш не знает, в какой ко
 L["ttt2_drk_remembers"] = "Вы протрезвели! Вы в команде {team}" -- CHANGED: "You've sobered up!"
 -- L["ttt2_drk_role"] = "Your role is {role}!"
 L["ttt2_drk_sober"] = "Алкаш протрезвел!"
+-- L["ttt2_drk_sobering"] = "Sobering up! Your role is {role}"
