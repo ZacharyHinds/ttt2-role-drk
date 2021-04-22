@@ -13,3 +13,4 @@ Once all their teammates are gone, the Drunk learns what their team is.]]
 L["ttt2_drk_remembers"] = "You've sobered up!"
 L["ttt2_drk_role"] = "Your role is {role}!"
 L["ttt2_drk_sober"] = "The drunk has sobered up!"
+L["ttt2_drk_sobering"] = "Sobering up! Your role is {role}"
