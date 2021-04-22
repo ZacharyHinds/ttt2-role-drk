@@ -20,7 +20,6 @@ local function SoberPly(drk, tgt)
     drk:SetNWFloat("ttt2_drk_start_time", CurTime())
     drk:SetNWString("ttt2_drk_rolestring", tgt:GetRoleStringRaw())
     drk:SetNWInt("ttt2_drk_delay", delay)
-    print("[TTT2 Drunk] Drunk: " .. drk:Nick() .. " is Sobering up in " .. delay .. " seconds")
 
     timer.Create("TTT2DrunkSoberDelay" .. drk:SteamID(), delay, 1, function()
         if GetRoundState() ~= ROUND_ACTIVE then return end
@@ -28,10 +27,8 @@ local function SoberPly(drk, tgt)
 
         drk:SetRole(new_role, new_team)
         SendFullStateUpdate()
-        print("[TTT2 Drunk] Writing NetMessage")
         net.Start("ttt2_drk_sober")
         net.Broadcast()
-        print("[TTT2 Drunk] Broadcasting Net Message")
     end)
 end
 
@@ -48,7 +45,6 @@ local function CheckSoberPly(drk, tgt)
         SoberPly(drk, tgt)
     else
         drk.drunkDeadCount = drk.drunkDeadCount + 1
-        print("[TTT2 Drunk] " .. drk:Nick() .. " sober chance: " .. math.Clamp((115 - (85 / (drk.drunkDeadCount))), 30, 100))
     end
 end
 
