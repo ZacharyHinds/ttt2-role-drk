@@ -14,3 +14,9 @@ L["ttt2_drk_remembers"] = "You've sobered up!"
 L["ttt2_drk_role"] = "Your role is {role}!"
 L["ttt2_drk_sober"] = "The drunk has sobered up!"
 L["ttt2_drk_sobering"] = "Sobering up! Your role is {role}"
+
+
+--EVENT STRINGS
+L["title_drk_sober"] = "A Drunk sobered up"
+L["desc_drk_sober"] = "{nick} sobered up."
+L["desc_drk_sober_role"] = "They became a {role}"
