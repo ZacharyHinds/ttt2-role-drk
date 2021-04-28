@@ -76,9 +76,9 @@ local function ResetDrunks()
     for i = 1, #plys do
         local ply = plys[i]
         ply.drunkDeadCount = 0
-        ply:SetNWFloat("ttt2_drk_start_time", nil)
-        ply:SetNWString("ttt2_drk_rolestring", nil)
-        ply:SetNWInt("ttt2_drk_delay", nil)
+        drk:SetNWFloat("ttt2_drk_start_time", nil)
+        drk:SetNWString("ttt2_drk_rolestring", nil)
+        drk:SetNWInt("ttt2_drk_delay", nil)
         local timer_id = "TTT2DrunkSoberDelay" .. ply:SteamID()
         if timer.Exists(timer_id) then
             timer.Remove(timer_id)
