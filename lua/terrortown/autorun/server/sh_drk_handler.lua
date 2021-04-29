@@ -15,7 +15,6 @@ local function SoberPly(drk, tgt)
     if drk:GetSubRole() ~= ROLE_DRUNK or tgt:GetSubRole() == ROLE_DRUNK then return end
     if not IsValid(tgt) or not tgt:IsPlayer() or tgt:Alive() then return end
     local new_role = tgt:GetSubRole()
-    local new_rolestring = tgt:GetRoleStringRaw()
     local new_team = tgt:GetTeam()
     local delay = math.random(GetConVar("ttt2_drk_delay_min"):GetInt(), GetConVar("ttt2_drk_delay_max"):GetInt())
     drk:SetNWFloat("ttt2_drk_start_time", CurTime())
@@ -26,8 +25,6 @@ local function SoberPly(drk, tgt)
         if GetRoundState() ~= ROUND_ACTIVE then return end
         if drk:GetSubRole() ~= ROLE_DRUNK then return end
 
-        events.Trigger(EVENT_DRK_SOBER, drk, new_rolestring)
-        
         drk:SetRole(new_role, new_team)
         SendFullStateUpdate()
         net.Start("ttt2_drk_sober")
