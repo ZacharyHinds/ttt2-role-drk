@@ -14,7 +14,7 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_drk_dynamic_convars", function(tbl)
     slider = true,
     min = 1,
     max = 60,
-    desc = "ttt2_drk_delay_min (def. 30)"
+    desc = "ttt2_drk_delay_min (def. 15)"
   })
   
   table.insert(tbl[ROLE_DRUNK], {
@@ -22,7 +22,7 @@ hook.Add("TTTUlxDynamicRCVars", "ttt2_ulx_drk_dynamic_convars", function(tbl)
     slider = true,
     min = 1,
     max = 60,
-    desc = "ttt2_drk_delay_max (def. 15)"
+    desc = "ttt2_drk_delay_max (def. 30)"
   })
 
 end)
