@@ -71,12 +71,12 @@ end)
 local function ResetDrunks()
     local plys = player.GetAll()
     for i = 1, #plys do
-        local ply = plys[i]
-        ply.drunkDeadCount = 0
+        local drk = plys[i]
+        drk.drunkDeadCount = 0
         drk:SetNWFloat("ttt2_drk_start_time", nil)
         drk:SetNWString("ttt2_drk_rolestring", nil)
         drk:SetNWInt("ttt2_drk_delay", nil)
-        local timer_id = "TTT2DrunkSoberDelay" .. ply:SteamID()
+        local timer_id = "TTT2DrunkSoberDelay" .. drk:SteamID()
         if timer.Exists(timer_id) then
             timer.Remove(timer_id)
         end
