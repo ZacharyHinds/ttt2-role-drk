@@ -14,3 +14,7 @@ L["ttt2_drk_remembers"] = "Вы протрезвели! Вы в команде {
 -- L["ttt2_drk_role"] = "Your role is {role}!"
 L["ttt2_drk_sober"] = "Алкаш протрезвел!"
 -- L["ttt2_drk_sobering"] = "Sobering up! Your role is {role}"
+
+-- SETTING STRINGS
+-- L["label_ttt2_drk_delay_min"] = "Minimum delay to receive new role when sobering up"
+-- L["label_ttt2_drk_delay_max"] = "Maximum delay to receive new role when sobering up"

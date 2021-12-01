@@ -1,3 +1,5 @@
+CreateConVar("ttt2_drk_delay_max", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+CreateConVar("ttt2_drk_delay_min", "15", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 if SERVER then
   AddCSLuaFile()
@@ -22,4 +24,27 @@ function ROLE:PreInitialize()
     minPlayers = 6, -- minimum amount of players until this role is able to get selected
     togglable = true, -- option to toggle a role for a client if possible (F1 menu)
   }
+end
+
+if CLIENT then
+  function ROLE:AddToSettingsMenu(parent)
+    local form = vgui.CreateTTT2Form(parent, "header_roles_additional")
+
+    form:MakeSlider({
+      serverConvar = "ttt2_drk_delay_min",
+      label = "label_ttt2_drk_delay_min",
+      min = 1,
+      max = 60,
+      decimal = 0
+    })
+
+    form:MakeSlider({
+      serverConvar = "ttt2_drk_delay_max",
+      label = "label_ttt2_drk_delay_max",
+      min = 1,
+      max = 60,
+      decimal = 0
+    })
+
+  end
 end
