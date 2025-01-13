@@ -40,6 +40,9 @@ local function CheckSoberPly(drk, tgt)
     if timer.Exists("TTT2DrunkSoberDelay" .. drk:SteamID()) then return end
 
     local chance = math.Clamp(105 - (90 / (drk.drunkDeadCount)), 30, 100)
+    local base_chance = GetConVar("ttt2_drk_base_chance"):GetInt()
+    local reducer = 100 - base_chance
+    local chance = math.Clamp(100 - (reducer / (drk.drunkDeadCount + 1)), base_chance, GetConVar("ttt2_drk_max_chance"):GetInt())
 
     if math.random(1, 100) <= chance then
         SoberPly(drk, tgt)
