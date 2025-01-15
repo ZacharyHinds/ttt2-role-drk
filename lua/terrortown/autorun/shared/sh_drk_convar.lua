@@ -4,7 +4,6 @@
 CreateConVar("ttt2_drk_delay_max", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 CreateConVar("ttt2_drk_delay_min", "15", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 CreateConVar("ttt2_drk_base_chance", "15", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
-CreateConVar("ttt2_drk_min_chance", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 CreateConVar("ttt2_drk_max_chance", "100", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 

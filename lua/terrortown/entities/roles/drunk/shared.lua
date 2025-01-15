@@ -46,5 +46,21 @@ if CLIENT then
       decimal = 0
     })
 
+    form:MakeSlider({
+      serverConvar = "ttt2_drk_base_chance",
+      label = "label_ttt2_drk_base_chance",
+      min = 1,
+      max = 100,
+      decimal = 0
+    })
+
+    form:MakeSlider({
+      serverConvar = "ttt2_drk_max_chance",
+      label = "label_ttt2_drk_max_chance",
+      min = 1,
+      max = 100,
+      decimal = 0
+    })
+
   end
 end
