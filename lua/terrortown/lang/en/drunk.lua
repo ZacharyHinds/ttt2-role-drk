@@ -18,3 +18,5 @@ L["ttt2_drk_sobering"] = "Sobering up! Your role is {role}"
 -- SETTING STRINGS
 L["label_ttt2_drk_delay_min"] = "Minimum delay to receive new role when sobering up"
 L["label_ttt2_drk_delay_max"] = "Maximum delay to receive new role when sobering up"
+L["label_ttt2_drk_base_chance"] = "Base percent chance to sober up"
+L["label_ttt2_drk_max_chance"] = "Maximum percent chance to sober up"
